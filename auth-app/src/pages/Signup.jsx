@@ -1,0 +1,138 @@
+import { useReducer,useState } from "react";
+import { Link } from "react-router-dom";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+const usernameReducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE":
+      return {
+        value: action.value,
+        error: action.value.trim() === "" ? "Username is required" : "",
+      };
+    default:
+      return state;
+  }
+};
+
+//Email reducer
+const emailReducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE":
+      return {
+        value: action.value,
+        error: emailRegex.test(action.value)
+          ? ""
+          : "Invalid email format",
+      };
+    default:
+      return state;
+  }
+};
+
+//Password reducer
+const passwordReducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE":
+      return {
+        value: action.value,
+        error:
+          action.value.length >= 6 ? "" : "Password must be at least 6 characters",
+      };
+    default:
+      return state;
+  }
+};
+
+function Signup() {
+    const [usernameState, dispatchUsername] = useReducer(usernameReducer, {
+        value: "",
+        error: "",
+    });
+
+
+    const [emailState, dispatchEmail] = useReducer(emailReducer, {
+        value: "",
+        error: "",
+    });
+
+    const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+        value: "",
+        error: "",
+    });
+
+    const [isSubmitted,setIsSubmitted]=useState(false); //To render the page again when page its value changes
+
+    //used for enabling/disabling the submit button
+    const isValid = usernameState.value.trim() && emailRegex.test(emailState.value) &&
+    passwordState.value.length >= 6 &&
+    !usernameState.error &&
+    !emailState.error &&
+    !passwordState.error;
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (isValid) {
+            setIsSubmitted(true);
+            console.log("Signup Data:", {
+            username: usernameState.value,
+            email: emailState.value,
+            password: passwordState.value,
+        });
+    }
+  };
+
+    return (
+        <>
+    {!isSubmitted && (<form className="card"  onSubmit={handleSubmit}>
+      <h2 >Signup</h2>
+      <input type="text" name="username" placeholder="Username" value={usernameState.value} className="input"
+        required onChange={(e) =>
+          dispatchUsername({ type: "CHANGE", value: e.target.value })
+        }
+      />
+      {usernameState.error && (
+        <p className="error-prompt">{usernameState.error}</p>
+      )}
+
+      <input
+        type="email" name="email" placeholder="Email" value={emailState.value} className="input"
+        required onChange={(e) =>
+          dispatchEmail({ type: "CHANGE", value: e.target.value })
+        }
+      />
+      {emailState.error && (
+        <p className="error-prompt">{emailState.error}</p>
+      )}
+
+      <input
+        type="password" name="password" placeholder="Password" className="input"
+        required value={passwordState.value}
+        onChange={(e) =>
+          dispatchPassword({ type: "CHANGE", value: e.target.value })
+        }
+      />
+      {passwordState.error && (
+        <p className="error-prompt">{passwordState.error}</p>
+      )}
+
+      <button type="submit" className="btn" disabled={!isValid}>
+        Signup
+      </button>
+
+      <pre>
+        Already registered? <Link to="/login">Login</Link>
+      </pre>
+    </form>
+    )}
+    {isSubmitted && ( //Return the message if the Form is successfully submitted.
+            <>
+          <p>Verification Email Sent Successfully! Click the link in the email to verify your email</p>
+          </>
+        )}
+    </>
+  );
+}
+
+export default Signup;
