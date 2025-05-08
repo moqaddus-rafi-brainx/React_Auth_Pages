@@ -8,7 +8,6 @@ import ResetPassword from './pages/ResetPassword';
 import VerifyPassword from './pages/VerifyPassword';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className='pages'>
