@@ -1,50 +1,9 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
+import confirmPassReducer from "../reducers/ResetPasswordReducer";
+import { passwordReducer } from "../reducers/SignupReducer";
 
-function passwordReducer(state,action){
-    switch(action.type){
-        case "CHANGE":
-            let error="";
-            if(action.value.trim()=="")
-            {
-                error="Password is required";
-            }
-            else if(action.value.trim().length<=6)
-            {
-                error="Password must have more than 6 letters";
-            }
-            
-            return{ //return changed copy of state
-                value:action.value.trim(),
-                error:error,
-            }
-        default:
-            return state;
-    }
-}
 
-function confirmPassReducer(state,action){
-
-    switch(action.type){
-        case "CHANGE":
-        let error=""
-        if(action.value.trim()=="")
-        {
-            error="Confirm password is required";
-        }
-        if(action.matchWith.trim()!=action.value.trim())
-        {
-            error="Confirm password doesnt match";
-        }
-        return{
-            value:action.value.trim(),
-            error:error
-        }
-        default:
-            return state;
-    }
-
-}
 
 function ResetPassword(){
 

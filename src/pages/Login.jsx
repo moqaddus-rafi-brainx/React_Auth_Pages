@@ -1,56 +1,9 @@
 import { useReducer } from "react";
 import { Link } from "react-router-dom";
+import { emailReducer,passwordReducer } from "../reducers/SignupReducer";
+import { emailRegex } from "../constants/regex";
 
-//email validation expression
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-//handle changes as send a copy of the state
-function emailReducer(state,action)
-{
-    switch(action.type){
-        case "CHANGE":
-            let error="";
-            if(action.value.trim()=="")
-            {
-                error="Email cannot be empty";
-            }
-            else if(!emailRegex.test(action.value.trim()))
-            {
-                error="Invalid Email";
-            }
-            return{ //return changed copy of state
-                value:action.value.trim(),
-                error:error,
-            }
-        default:
-            return state;
-
-    }
-
-}
-
-function passwordReducer(state,action){
-    switch(action.type){
-        case "CHANGE":
-            let error="";
-            if(action.value.trim()=="")
-            {
-                error="Password is required";
-            }
-            else if(action.value.trim().length<=6)
-            {
-                error="Password must have more than 6 letters";
-            }
-            return{ //return changed copy of state
-                value:action.value.trim(),
-                error:error,
-            }
-        default:
-            return state;
-    }
-    
-
-}
 
 //Login function
 function Login(){

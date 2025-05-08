@@ -1,31 +1,7 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
-
-//Regular Expression for email validation
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function emailReducer(state,action)
-{
-    switch(action.type){
-        case "CHANGE":
-            let error="";
-            if(action.value.trim()=="")
-            {
-                error="Email cannot be empty";
-            }
-            else if(!emailRegex.test(action.value.trim()))
-            {
-                error="Invalid Email";
-            }
-            return{ //return changed copy of state
-                value:action.value.trim(),
-                error:error,
-            }
-        default:
-            return state;
-
-    }
-}
+import emailReducer from "../reducers/ForgetPasswordReducer";
+import { emailRegex } from "../constants/regex";
 
 //Forget password function
 function ForgetPassword(){

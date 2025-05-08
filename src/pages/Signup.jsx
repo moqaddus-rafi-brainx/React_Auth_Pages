@@ -1,49 +1,8 @@
 import { useReducer,useState } from "react";
 import { Link } from "react-router-dom";
+import { usernameReducer,emailReducer,passwordReducer } from "../reducers/SignupReducer";
+import { emailRegex } from "../constants/regex";
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-const usernameReducer = (state, action) => {
-  switch (action.type) {
-    case "CHANGE":
-      return {
-        value: action.value,
-        error: action.value.trim() === "" ? "Username is required" : "",
-      };
-    default:
-      return state;
-  }
-};
-
-//Email reducer
-const emailReducer = (state, action) => {
-  switch (action.type) {
-    case "CHANGE":
-      return {
-        value: action.value,
-        error: emailRegex.test(action.value)
-          ? ""
-          : "Invalid email format",
-      };
-    default:
-      return state;
-  }
-};
-
-//Password reducer
-const passwordReducer = (state, action) => {
-  switch (action.type) {
-    case "CHANGE":
-      return {
-        value: action.value,
-        error:
-          action.value.length >= 6 ? "" : "Password must be at least 6 characters",
-      };
-    default:
-      return state;
-  }
-};
 
 function Signup() {
     const [usernameState, dispatchUsername] = useReducer(usernameReducer, {
